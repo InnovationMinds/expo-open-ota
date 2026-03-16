@@ -1,0 +1,66 @@
+---
+sidebar_position: 3
+---
+
+# Scaleway Edge Services
+
+The Scaleway Edge Services CDN feature requires your storage mode to be set to `s3`. You can follow the [storage guide](/docs/server-configuration/storage?storage=s3) to set up your storage solution.
+
+:::note
+The environment variables required for this CDN are listed below, you can set them in a `.env` file in the root of the project or keep them in a safe place to prepare for deployment.
+:::
+
+## Configure your S3-compatible storage
+
+Set Expo Open OTA to use your Scaleway Object Storage bucket:
+
+```bash title=".env"
+STORAGE_MODE=s3
+AWS_REGION=fr-par
+AWS_BASE_ENDPOINT=https://s3.fr-par.scw.cloud
+S3_BUCKET_NAME=your-bucket-name
+AWS_ACCESS_KEY_ID=your-scaleway-access-key
+AWS_SECRET_ACCESS_KEY=your-scaleway-secret-key
+```
+
+:::important
+Your bucket visibility can remain private, but any object that you want to expose via Edge Services must be set to public visibility.
+
+If you are using Edge Services with bucket website mode, objects can remain private.
+:::
+
+## Configure your Edge Services domain
+
+Once your Edge Services pipeline is created, set the pipeline domain in your environment:
+
+```bash title=".env"
+SCALEWAY_CDN_DOMAIN=https://your-pipeline.edge.scw.cloud
+```
+
+You can also use a custom domain attached to your pipeline.
+
+## Optional: namespace keys in shared bucket
+
+If you share one bucket between multiple apps, you can set a key prefix:
+
+```bash title=".env"
+S3_KEY_PREFIX=myapp
+```
+
+Assets are then served through Edge Services as:
+
+`https://your-pipeline.edge.scw.cloud/myapp/<branch>/<runtimeVersion>/<updateId>/<asset>`
+
+## Summary of Environment Variables
+
+```bash title=".env"
+STORAGE_MODE=s3
+AWS_REGION=fr-par
+AWS_BASE_ENDPOINT=https://s3.fr-par.scw.cloud
+S3_BUCKET_NAME=your-bucket-name
+AWS_ACCESS_KEY_ID=your-scaleway-access-key
+AWS_SECRET_ACCESS_KEY=your-scaleway-secret-key
+SCALEWAY_CDN_DOMAIN=https://your-pipeline.edge.scw.cloud
+# optional
+S3_KEY_PREFIX=myapp
+```
